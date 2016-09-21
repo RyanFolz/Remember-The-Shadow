@@ -52,21 +52,19 @@ public class LevelTest {
 	
 	public ArrayList<Sign> getSign(){
 		ArrayList<Sign> tempList = new ArrayList<>();
-		tempList.add(new Sign(-500, screenHeight - (11 * sign.getHeight() / 6	), sign.getWidth(), sign.getHeight(), "eep"));	
-		tempList.add(new Sign(screenWidth / 2, screenHeight - (11 * sign.getHeight() / 6), sign.getWidth(), sign.getHeight(), "FUCKAAAAA YOU"));
-		
+		tempList.add(new Sign(-500, screenHeight - sign.getHeight() - screenHeight / 20 + 6, sign.getWidth(), sign.getHeight(), "eep"));		
 		return tempList;
 	}
 	
 	public ArrayList<Door> getDoor(){
 		ArrayList<Door> tempList = new ArrayList<>();
-		tempList.add(new Door(300, screenHeight - door.getHeight() - screenHeight / 24 , door, PrintScreen.LEVEL_ONE, PrintScreen.LEVEL_TEST));
+		tempList.add(new Door(300, screenHeight - door.getHeight() - screenHeight / 20 , door, PrintScreen.LEVEL_ONE, PrintScreen.LEVEL_TEST));
 		return tempList;
 	}
 	
 	public ArrayList<Platform> getPlatform(){
 		ArrayList<Platform> platformList = new ArrayList<>();
-		platformList.add(new Platform(-10000, (int)(23 * screenHeight / 24), 20000, (int)(screenHeight / 24), Color.BLUE));
+		platformList.add(new Platform(-10000, (int)(19 * screenHeight / 20), 20000, (int)(screenHeight / 20), Color.BLUE));
 		platformList.add(new Platform(screenWidth / 2, 19 * screenHeight / 27, screenWidth / 4, screenHeight / 60, Color.BLUE));
 		platformList.add(new Platform((int)(screenWidth / 4), screenHeight / 2, screenWidth / 4, screenHeight / 60, Color.BLUE));
 		platformList.add(new Platform((int)(3 *screenWidth / 4), screenHeight / 4, screenWidth / 4, screenHeight / 60, Color.BLUE));
@@ -77,7 +75,7 @@ public class LevelTest {
 
 	public ArrayList<Hedgehog> getHedgehog(){
 		ArrayList<Hedgehog> hedgehogList = new ArrayList<>();
-		hedgehogList.add(new Hedgehog(hedgehog, 0, screenHeight - hedgehog.getHeight() - screenHeight / 22, 5, 5, 0, screenWidth, null));
+		hedgehogList.add(new Hedgehog(hedgehog, 0, screenHeight - hedgehog.getHeight() - screenHeight / 20, 5, 5, 0, screenWidth, null));
 		return hedgehogList;
 	}
 	

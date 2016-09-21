@@ -70,7 +70,7 @@ public class PrintScreen extends JPanel implements KeyListener
 	boolean gameOver;
 
 	public int screenHeight;
-	int firstLevelFrames = 0;
+	int firstLevelFrames;
 	public int screenWidth;
 	public int shadowTimer;
 	public int codeRun;
@@ -167,7 +167,9 @@ public class PrintScreen extends JPanel implements KeyListener
 				walkRight[0].getWidth() /6 - 6,
 				0, Color.RED);
 
-		InitializeLevel(level, LEVEL_TEST);
+		InitializeLevel(level, previousLevel);
+		
+		
 
 		Thread gameThread = new Thread()
 		{
@@ -566,8 +568,19 @@ public class PrintScreen extends JPanel implements KeyListener
 			}
 			
 			if(platformList.size() > 0){
+				if(platformList.get(0).getY() > screenHeight - screenHeight / 20){
+					System.out.println("Bottom Platform lower than thing");
+				}else{
+					System.out.println("Bottom Platform not lower than thing");
+				}
+				if(player.getY() < centerY){
+					System.out.println("Player y is less than centerY");
+				}else{
+					System.out.println("Player y is not less than centerY");
+				}
+				System.out.println(player.getX());
+				System.out.println(player.getY());
 				if(platformList.get(0).getY() > screenHeight - screenHeight / 20 || player.getY() < centerY){
-
 					try{
 						for(Ball b : ballList){
 							b.setY(b.getY() + player.getyVel());
@@ -602,14 +615,14 @@ public class PrintScreen extends JPanel implements KeyListener
 					hillDisplacement -= player.getyVel() / 2;
 					backgroundYDisplacement += player.getyVel() / 4;
 
-
+					
 
 					if(player.getY() != centerY){
 						if(firstLevelFrames > 0){
 							firstLevelFrames --;
 						}else{
 							double distance = player.getY() - centerY;
-
+							
 							hillDisplacement += distance / 2;
 							backgroundYDisplacement += distance / 4;
 							for(Platform p: platformList){
@@ -1144,8 +1157,8 @@ public class PrintScreen extends JPanel implements KeyListener
 				player.setY(lvlTest.getY());
 			}
 			System.out.println("TEMP DOOR Y: " + tempDoor.getY());
-			this.level = LEVEL_TEST;
-			firstLevelFrames = 50;
+			this.level = LEVEL_TEST;/*
+			firstLevelFrames = 50;*/
 			break;
 
 		case LEVEL_ONE:
@@ -1171,8 +1184,8 @@ public class PrintScreen extends JPanel implements KeyListener
 				player.setX(lvlOne.getX());
 				player.setY(lvlOne.getY());
 			}
-			this.level = LEVEL_ONE;
-			firstLevelFrames = 50;
+			this.level = LEVEL_ONE;/*
+			firstLevelFrames = 50;*/
 			break;
 
 		}
