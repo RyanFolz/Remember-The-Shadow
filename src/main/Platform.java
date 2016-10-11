@@ -7,6 +7,7 @@ public class Platform {
 	String code = "";
 	Color color;
 	
+	
 	public Platform(double x, double y, double width, double height, Color color){
 		this.x = x;
 		this.y = y;
@@ -36,19 +37,17 @@ public class Platform {
 	
 	
 	public void updatePosition(){
-		System.out.println("ABS: " + Math.abs(xStart - x));
-		System.out.println("xDis: " + xDis);
-		if(Math.abs(xStart - x) < xDis){
+		if(Math.abs(xStart - x) < Math.abs(xDis)){
 			x += xVel;
-			System.out.println("X CHANGED");
+			
 		}else{
-			System.out.println("uhhh");
+			
 		}
-		if(Math.abs(yStart - y) < yDis){
+		if(Math.abs(yStart - y) < Math.abs(yDis)){
 			y += yVel;
-			System.out.println("X CHANGED");
+			
 		}else{
-			System.out.println("uhhh");
+			
 		}
 		
 		x2 = x1;

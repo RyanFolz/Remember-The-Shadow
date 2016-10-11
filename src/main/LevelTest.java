@@ -52,13 +52,15 @@ public class LevelTest {
 	
 	public ArrayList<Sign> getSign(){
 		ArrayList<Sign> tempList = new ArrayList<>();
-		tempList.add(new Sign(-500, screenHeight - sign.getHeight() - screenHeight / 20 + 6, sign.getWidth(), sign.getHeight(), "eep"));		
+		tempList.add(new Sign(-500, screenHeight - sign.getHeight() - screenHeight / 20 + 6, sign.getWidth(), sign.getHeight(), "eep"));	
+		tempList.add(new Sign(screenWidth / 2, screenHeight - sign.getHeight() - screenHeight / 20 + 6, sign.getWidth(), sign.getHeight(), "urm"));
+		
 		return tempList;
 	}
 	
 	public ArrayList<Door> getDoor(){
 		ArrayList<Door> tempList = new ArrayList<>();
-		tempList.add(new Door(300, screenHeight - door.getHeight() - screenHeight / 20 , door, PrintScreen.LEVEL_ONE, PrintScreen.LEVEL_TEST));
+		tempList.add(new Door(300, screenHeight - door.getHeight() - screenHeight / 20 , door, PrintScreen.LEVEL_TWO, PrintScreen.LEVEL_TEST));
 		return tempList;
 	}
 	

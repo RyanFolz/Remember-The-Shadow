@@ -8,7 +8,7 @@ public class Main{
 
 	public static double BOX_WIDTH = 1000, BOX_HEIGHT = 500, UPDATE_RATE = 90, SHURIKEN_SPEED = .012, ROTATION_SPEED = 10;
 	public static int UP = 1, MIDDLE = 2, DOWN = 3, DEFAULT_INSIDE_HP_WIDTH = 300;
-	protected static JFrame frame = new JFrame("Platformer");
+	protected static JFrame frame = new JFrame("The Past is We");
 
 	public static void main(String[] args) 
 	{

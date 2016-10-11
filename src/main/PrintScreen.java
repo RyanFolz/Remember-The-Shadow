@@ -33,7 +33,7 @@ public class PrintScreen extends JPanel implements KeyListener
 	 */
 	private static final long serialVersionUID = 7514116826406468440L;
 	public static final int LEVEL_TEST = 0;
-	public static final int LEVEL_ONE = 1;
+	public static final int LEVEL_ONE = 1, LEVEL_TWO = 2, LEVEL_THREE = 3, LEVEL_FOUR = 4, LEVEL_FIVE = 5, LEVEL_SIX = 6, LEVEL_SEVEN = 7, LEVEL_EIGHT = 8;
 	public static final double gravity = 4 * .13 / 5;
 	public static final double movingSpeed = 4 * .13 / 3;
 	public static final double friction = 4 * (2/3) /3;
@@ -60,7 +60,7 @@ public class PrintScreen extends JPanel implements KeyListener
 	boolean showSign = false;
 	Sign signToShow = null;
 
-	int level = LEVEL_ONE;
+	int level = LEVEL_THREE;
 	int previousLevel = -1;
 
 
@@ -151,7 +151,7 @@ public class PrintScreen extends JPanel implements KeyListener
 		screenCordY = screenHeight;
 
 		for(int i = 0; i < 500; i ++){
-			playerLocation.add(new PlayerPoint(player.getX(), player.getY(), 0, player.isFacingRight(), 0, 0));
+			playerLocation.add(new PlayerPoint(player.getX(), player.getY(), 0, player.isFacingRight(), 0, 0, player.isStanding()));
 		}
 
 		hillDisplacement = 0;
@@ -168,8 +168,8 @@ public class PrintScreen extends JPanel implements KeyListener
 				0, Color.RED);
 
 		InitializeLevel(level, previousLevel);
-		
-		
+
+
 
 		Thread gameThread = new Thread()
 		{
@@ -253,19 +253,18 @@ public class PrintScreen extends JPanel implements KeyListener
 		drawRun ++;
 		//System.out.println("DRAW: " + drawRun);
 
-		if(level == LEVEL_TEST){
-			for(int y = 0 - getBackgroundYDisplacement() - background.getHeight(); y < screenHeight; y += backgroundHeight){
-				for(int x = 0 - getBackgroundDisplacement() - backgroundWidth; x < screenWidth; x += backgroundWidth){
-					g2d.drawImage(background, x, y, null)  ;
 
-				}
-			}
+		for(int y = 0 - getBackgroundYDisplacement() - background.getHeight(); y < screenHeight; y += backgroundHeight){
+			for(int x = 0 - getBackgroundDisplacement() - backgroundWidth; x < screenWidth; x += backgroundWidth){
+				g2d.drawImage(background, x, y, null)  ;
 
-			for(int x = (int) (0 - getHillBackgroundDisplacement() - hillBackground.getWidth()); x < screenWidth; x +=  hillBackground.getWidth()){
-				g2d.drawImage(hillBackground, x,(int)( hillBackground.getHeight() - hillDisplacement), null);
 			}
 		}
-		
+
+		for(int x = (int) (0 - getHillBackgroundDisplacement() - hillBackground.getWidth()); x < screenWidth; x +=  hillBackground.getWidth()){
+			g2d.drawImage(hillBackground, x,(int)( hillBackground.getHeight() - hillDisplacement), null);
+		}
+
 		if(level == LEVEL_ONE){
 			g2d.drawImage(black, -10, -10, null);
 		}
@@ -273,9 +272,7 @@ public class PrintScreen extends JPanel implements KeyListener
 
 
 
-		for(Image i: imageList){
-			g2d.drawImage(i.getImage(), (int)i.getX(), (int)i.getY(), null);
-		}
+
 
 
 		/*System.out.println("background printed " + backgroundPrint + " times!");*/
@@ -287,6 +284,11 @@ public class PrintScreen extends JPanel implements KeyListener
 			g2d.setColor(Color.white);
 			g2d.drawRect((int)p.getX(), (int)p.getY(), (int)p.getWidth(), (int)p.getHeight());
 		}
+
+		for(Image i: imageList){
+			g2d.drawImage(i.getImage(), (int)i.getX(), (int)i.getY(), null);
+		}
+
 		for(Button b: buttonList){
 			g2d.setColor(b.getColor());
 			g2d.fillRect((int)b.getX(), (int)b.getY(), (int)b.getWidth(), (int)b.getHeight());
@@ -373,7 +375,7 @@ public class PrintScreen extends JPanel implements KeyListener
 		 */
 
 
-/*
+		/*
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect((int)(player.getX() + player.getImage().getWidth() / 2 - 3	),
 				(int)(player.getY() + player.getImage().getHeight() + 1), 
@@ -443,10 +445,9 @@ public class PrintScreen extends JPanel implements KeyListener
 		//System.out.println("CODE");
 		boolean collision = false;
 		if(!gameOver){
-
 			codeRun ++;
 
-			playerLocation.add(new PlayerPoint(player.getX(), player.getY(), 0, player.facingRight, 0, 0));
+			playerLocation.add(new PlayerPoint(player.getX(), player.getY(), 0, player.facingRight, 0, 0, player.isStanding()));
 
 
 
@@ -469,7 +470,7 @@ public class PrintScreen extends JPanel implements KeyListener
 						throwBox.setHealth(throwBox.getHealth() - 19);
 					}
 				}
-			}catch(NoSuchElementException e){
+			}catch(Exception e){
 
 			}
 
@@ -552,7 +553,7 @@ public class PrintScreen extends JPanel implements KeyListener
 
 					}
 				}
-			}catch(ConcurrentModificationException e){
+			}catch(Exception e){
 
 			}
 			for(Hedgehog h : hedgehogList){
@@ -566,21 +567,12 @@ public class PrintScreen extends JPanel implements KeyListener
 			for(Door d: doorList){
 				d.setX(d.getX() + player.getxVel());
 			}
-			
+			for(Image i: imageList){
+				i.setX(i.getX() + player.getxVel());
+			}
+
 			if(platformList.size() > 0){
-				if(platformList.get(0).getY() > screenHeight - screenHeight / 20){
-					System.out.println("Bottom Platform lower than thing");
-				}else{
-					System.out.println("Bottom Platform not lower than thing");
-				}
-				if(player.getY() < centerY){
-					System.out.println("Player y is less than centerY");
-				}else{
-					System.out.println("Player y is not less than centerY");
-				}
-				System.out.println(player.getX());
-				System.out.println(player.getY());
-				if(platformList.get(0).getY() > screenHeight - screenHeight / 20 || player.getY() < centerY){
+				if(platformList.get(0).getY() > screenHeight - screenHeight / 10 || player.getY() < centerY){
 					try{
 						for(Ball b : ballList){
 							b.setY(b.getY() + player.getyVel());
@@ -611,60 +603,64 @@ public class PrintScreen extends JPanel implements KeyListener
 					for(Door d: doorList){
 						d.setY(d.getY() + player.getyVel());
 					}
+					for(Image i : imageList){
+						i.setY(i.getY() + player.getyVel());
+					}
 
 					hillDisplacement -= player.getyVel() / 2;
 					backgroundYDisplacement += player.getyVel() / 4;
 
-					
+
 
 					if(player.getY() != centerY){
-						if(firstLevelFrames > 0){
-							firstLevelFrames --;
-						}else{
-							double distance = player.getY() - centerY;
-							
-							hillDisplacement += distance / 2;
-							backgroundYDisplacement += distance / 4;
-							for(Platform p: platformList){
-								p.setY(p.getY() - distance);
-								p.setyStart(p.getyStart() - distance);
-							}
 
-							try{
-								for(Ball b : ballList){
-									b.setY(b.getY() - distance);
-								}
-							}catch(ConcurrentModificationException e){
+						double distance = player.getY() - centerY;
 
-							}
-							for(Button b: buttonList){
+						hillDisplacement += distance / 2;
+						backgroundYDisplacement -= distance / 4;
+						for(Platform p: platformList){
+							p.setY(p.getY() - distance);
+							p.setyStart(p.getyStart() - distance);
+						}
+
+						try{
+							for(Ball b : ballList){
 								b.setY(b.getY() - distance);
 							}
-							try{
-								for(PlayerPoint p: playerLocation){
-									p.setY(p.getY() - distance);
-								}
-							}catch(ConcurrentModificationException e){
+						}catch(ConcurrentModificationException e){
 
-							}
-							for(Hedgehog h : hedgehogList){
-								h.setY(h.getY() - distance);
-							}
-							for(Sign s: signList){
-								s.setY(s.getY() - distance);
-							}
-							for(Door d: doorList){
-								d.setY(d.getY() - distance);
-							}
-
-
-							player.setY(centerY);
 						}
+						for(Button b: buttonList){
+							b.setY(b.getY() - distance);
+						}
+						try{
+							for(PlayerPoint p: playerLocation){
+								p.setY(p.getY() - distance);
+							}
+						}catch(ConcurrentModificationException e){
+
+						}
+						for(Hedgehog h : hedgehogList){
+							h.setY(h.getY() - distance);
+						}
+						for(Sign s: signList){
+							s.setY(s.getY() - distance);
+						}
+						for(Door d: doorList){
+							d.setY(d.getY() - distance);
+						}
+						for(Image i : imageList){
+							i.setY(i.getY() - distance);
+						}
+
+
+						player.setY(centerY);
+
 					}
 				}else{
 					player.setY(player.getY() - player.getyVel());
-					if(platformList.get(0).getY() < screenHeight - screenHeight / 20){
-						double distance = platformList.get(0).getY() - (screenHeight - screenHeight / 20);
+					if(platformList.get(0).getY() < screenHeight - screenHeight / 10){
+						double distance = platformList.get(0).getY() - (screenHeight - screenHeight / 10);
 						hillDisplacement += distance / 2;
 						backgroundYDisplacement += distance / 4;
 						for(Platform p: platformList){
@@ -697,6 +693,9 @@ public class PrintScreen extends JPanel implements KeyListener
 						}
 						for(Door d: doorList){
 							d.setY(d.getY() - distance);
+						}
+						for(Image i : imageList){
+							i.setY(i.getY() - distance);
 						}
 					}
 				}
@@ -737,6 +736,9 @@ public class PrintScreen extends JPanel implements KeyListener
 					}
 					for(Door d: doorList){
 						d.setX(d.getX() - distance);
+					}
+					for(Image i : imageList){
+						i.setX(i.getX() - distance);
 					}
 
 
@@ -911,6 +913,79 @@ public class PrintScreen extends JPanel implements KeyListener
 
 
 			try{
+				for(Hedgehog h: hedgehogList){
+					
+					Rectangle hedgeRect = new Rectangle((int)h.getX(),(int) h.getY(), h.getImage().getWidth(), h.getImage().getHeight());
+					for(Ball b: ballList){
+						Rectangle bottomRectangle = new Rectangle((int)(b.getX() + b.getImage().getWidth() / 2 - 3), (int) (b.getY() + b.getImage().getHeight()), 6, 6);
+
+
+						Rectangle topRectangle = new Rectangle((int)(b.getX() + b.getImage().getWidth() / 2 - 3), (int) (b.getY() - 6), 6, 6);
+
+
+
+						if(hedgeRect.contains(bottomRectangle)){
+
+							b.setY(h.getY() - b.getImage().getHeight());
+							b.setyVel(0);
+							if(b.right){
+								if(b.getxVel() > 0){
+									b.setxVel(b.getxVel() - movingSpeed);
+								}else{
+									b.setxVel(0);
+								}
+							}else{
+								if(b.getxVel() < 0){
+									b.setxVel(b.getxVel() + movingSpeed);
+								}else{
+									b.setxVel(0);
+								}
+							}
+
+						}
+
+						Rectangle rightRectangle = new Rectangle((int) b.getX() + b.getImage().getWidth(), (int)b.getY() + b.getImage().getHeight() / 2 - 3, 6, 6);
+						Rectangle rightBotRectangle = new Rectangle((int)b.getX() + 5 * b.getImage().getWidth() / 6, (int)b.getY() + 5 * b.getImage().getHeight() / 6, 6, 6);
+						Rectangle rightTopRectangle = new Rectangle((int)b.getX() + 5 * b.getImage().getWidth() / 6, (int)b.getY() + b.getImage().getHeight() / 6 - 6, 6, 6);
+
+						Rectangle leftRectangle = new Rectangle((int) b.getX() - 6, (int)b.getY() + b.getImage().getHeight() / 2 - 3, 6, 6);
+						Rectangle leftBotRectangle = new Rectangle((int)b.getX() + 1 * b.getImage().getWidth() / 6 - 6, (int)b.getY() + 5 * b.getImage().getHeight() / 6, 6, 6);
+						Rectangle leftTopRectangle = new Rectangle((int)b.getX() + 1 * b.getImage().getWidth() / 6 - 6, (int)b.getY() +  b.getImage().getHeight() / 6 - 6, 6, 6);
+
+						if(hedgeRect.contains(topRectangle)){
+
+							b.setY(h.getY() + h.getImage().getHeight() + 2);
+							b.setyVel(0);
+						}else
+
+							if((hedgeRect.contains(rightRectangle) || hedgeRect.contains(rightBotRectangle) || hedgeRect.contains(rightTopRectangle))
+									&& b.getxVel() > 0){
+								b.setX(hedgeRect.getX() - b.getImage().getWidth());
+								b.setxVel(-1 * b.getxVel() / 3);
+								if(b.isRight()){
+									b.setRight(false);
+								}else{
+									b.setRight(true);
+								}
+							} else
+
+								if((hedgeRect.contains(leftRectangle) || hedgeRect.contains(leftBotRectangle) || hedgeRect.contains(leftTopRectangle))
+										&& b.getxVel() < 0){
+									b.setX(hedgeRect.getX() + hedgeRect.getWidth());
+									b.setxVel(-1 * b.getxVel() / 3);
+									if(b.isRight()){
+										b.setRight(false);
+									}else{
+										b.setRight(true);
+									}
+
+								}					
+
+
+					}
+
+				}
+
 				for(Platform p : platformList){
 					if(!collision){					
 
@@ -969,7 +1044,8 @@ public class PrintScreen extends JPanel implements KeyListener
 									b.setyVel(0);
 								}else
 
-									if(platRect.contains(rightRectangle) || platRect.contains(rightBotRectangle) || platRect.contains(rightTopRectangle)){
+									if((platRect.contains(rightRectangle) || platRect.contains(rightBotRectangle) || platRect.contains(rightTopRectangle))
+											&& b.getxVel() > 0){
 										b.setX(platRect.getX() - b.getImage().getWidth());
 										b.setxVel(-1 * b.getxVel() / 3);
 										if(b.isRight()){
@@ -979,7 +1055,8 @@ public class PrintScreen extends JPanel implements KeyListener
 										}
 									} else
 
-										if(platRect.contains(leftRectangle) || platRect.contains(leftBotRectangle) || platRect.contains(leftTopRectangle)){
+										if((platRect.contains(leftRectangle) || platRect.contains(leftBotRectangle) || platRect.contains(leftTopRectangle))
+												&& b.getxVel() < 0){
 											b.setX(platRect.getX() + platRect.getWidth());
 											b.setxVel(-1 * b.getxVel() / 3);
 											if(b.isRight()){
@@ -995,12 +1072,31 @@ public class PrintScreen extends JPanel implements KeyListener
 
 						}
 
+						if(player.getyVel() != 0){
+							player.isStanding = false;
+						}
 
 						if(platRect.contains(playerBotMidRect) || platRect.contains(playerBotRightRect) || platRect.contains(playerBotLeftRect)){
-
 							player.setY(p.getY() - player.getImage().getHeight());
 							player.setyVel(0);
+
+							if(p.getColor() == Color.CYAN){
+								for(Button b: buttonList){
+									if(b.getCode().equals(p.getCode()) && b.getColor() == Color.green){
+
+										player.setyVel(-1 * p.getyVel());
+
+
+									}
+								}
+							}
+
 							player.isStanding = true;
+
+							if(p.getColor() == Color.red){
+								player.isDead = true;
+							}
+
 						}
 
 						Rectangle playerTopMidRect = new Rectangle((int)(player.getX() + player.getImage().getWidth() / 2 - 3),
@@ -1045,9 +1141,24 @@ public class PrintScreen extends JPanel implements KeyListener
 								(int) player.getY() +  19 * player.getImage().getHeight() / 20 - 3,
 								1, 6);
 
+
 						if(platRect.contains(playerTopMidRect) || platRect.contains(playerTopRightRect) || platRect.contains(playerTopLeftRect)){
 							player.setyVel(0);
 							player.setY(p.getY() + p.getHeight() + 2);
+							player.setStanding(true);
+
+							if(p.getColor() == Color.red){
+								player.isDead = true;
+							}
+							if(p.getColor() == Color.cyan){
+								if(player.isStanding == true){
+									if(player.getX() + player.getImage().getWidth() / 2 > p.getX() + p.getWidth() / 2){
+										player.setX(p.getX() + p.getWidth() + 2);
+									}else{
+										player.setX(p.getX() - player.getImage().getWidth());
+									}
+								}
+							}
 
 						}else{
 							if(true){
@@ -1055,12 +1166,20 @@ public class PrintScreen extends JPanel implements KeyListener
 										|| platRect.contains(playerLeftBotRect) || platRect.contains(playerLeftBotBotRect))	{
 									player.setxVel(0);
 									player.setX(p.getX() + 1 + p.getWidth() - player.getImage().getWidth() / 5);
+
+									if(p.getColor() == Color.red){
+										player.isDead = true;
+									}
 								}
 
 								if(platRect.contains(playerRightMidRect) || platRect.contains(playerRightTopRect) || platRect.contains(playerRightTopTopRect)
 										|| platRect.contains(playerRightBotRect) || platRect.contains(playerRightBotBotRect))	{
 									player.setxVel(0);
 									player.setX(p.getX() - 2 - 4 *player.getImage().getWidth() / 5);
+
+									if(p.getColor() == Color.red){
+										player.isDead = true;
+									}
 								}
 							}
 						}
@@ -1070,6 +1189,10 @@ public class PrintScreen extends JPanel implements KeyListener
 				}
 			}catch(ConcurrentModificationException e){
 
+			}
+
+			if(player.isDead()){
+				respawnPlayer();
 			}
 
 			boolean isNear = false;
@@ -1097,6 +1220,22 @@ public class PrintScreen extends JPanel implements KeyListener
 
 		}
 
+	}
+
+	private void respawnPlayer(){
+		PlayerPoint pp = null;
+		for(PlayerPoint p : playerLocation){
+			if(p.isStanding){
+				pp = p;
+				break;
+			}
+		}
+		if(pp != null){
+			player.setX(pp.getX());
+			player.setY(pp.getY());
+			player.setDead(false);
+		}
+		playerLocation.clear();
 	}
 
 	private int getBackgroundDisplacement() {
@@ -1150,15 +1289,14 @@ public class PrintScreen extends JPanel implements KeyListener
 			signList = lvlTest.getSign();	
 			imageList = lvlTest.getImages();
 			if(tempDoor != null){
-				player.setX(tempDoor.getX());
-				player.setY(tempDoor.getY());
+				player.setX(tempDoor.getX() + tempDoor.getImage().getWidth() / 2 - player.getImage().getWidth() / 2);
+				player.setY(tempDoor.getY() + tempDoor.getImage().getHeight() - player.getImage().getHeight());
 			}else{
 				player.setX(lvlTest.getX());
 				player.setY(lvlTest.getY());
 			}
 			System.out.println("TEMP DOOR Y: " + tempDoor.getY());
-			this.level = LEVEL_TEST;/*
-			firstLevelFrames = 50;*/
+			this.level = LEVEL_TEST;
 			break;
 
 		case LEVEL_ONE:
@@ -1176,19 +1314,99 @@ public class PrintScreen extends JPanel implements KeyListener
 			platformList = lvlOne.getPlatform();
 			signList = lvlOne.getSign();	
 			imageList = lvlOne.getImages();
+
 			if(tempDoor != null){
-				player.setX(tempDoor.getX());
-				player.setY(tempDoor.getY());
+				player.setX(tempDoor.getX() + tempDoor.getImage().getWidth() / 2 - player.getImage().getWidth() / 2);
+				player.setY(tempDoor.getY() + tempDoor.getImage().getHeight() - player.getImage().getHeight());
+				for(Image i : imageList){
+					i.setX(i.getX() + 11.1 * screenWidth / 18);
+				}
 				System.out.println("WORK WORK WORK");
 			}else{
 				player.setX(lvlOne.getX());
 				player.setY(lvlOne.getY());
 			}
-			this.level = LEVEL_ONE;/*
-			firstLevelFrames = 50;*/
+			this.level = LEVEL_ONE;
 			break;
 
+
+		case LEVEL_TWO:
+			LevelTwo lvlTwo = new LevelTwo(screenWidth, screenHeight, sign, door, hedgehogFacingLeft, ball);
+			buttonList = lvlTwo.getButton();
+			doorList = lvlTwo.getDoor();
+			for(Door d: doorList){
+				System.out.println("FOR DOOR CODE TO: " + d.getCodeTo());
+				System.out.println("FOR DOOR CODE FROM: " + d.getCodeFrom());
+				if(d.getCodeTo() == levelFrom && d.getCodeFrom() == level){
+					tempDoor = d;
+				}
+			}
+			hedgehogList = lvlTwo.getHedgehog();
+			platformList = lvlTwo.getPlatform();
+			signList = lvlTwo.getSign();	
+			imageList = lvlTwo.getImages();
+			if(tempDoor != null){
+				player.setX(tempDoor.getX() + tempDoor.getImage().getWidth() / 2 - player.getImage().getWidth() / 2);
+				player.setY(tempDoor.getY() + tempDoor.getImage().getHeight() - player.getImage().getHeight());
+				System.out.println("WORK WORK WORK");
+			}else{
+				player.setX(lvlTwo.getX());
+				player.setY(lvlTwo.getY());
+			}
+			this.level = LEVEL_TWO;
+			break;
+		case LEVEL_THREE:
+			LevelThree lvlThree = new LevelThree(screenWidth, screenHeight, sign, door, hedgehogFacingLeft, ball);
+			buttonList = lvlThree.getButton();
+			doorList = lvlThree.getDoor();
+			for(Door d: doorList){
+				System.out.println("FOR DOOR CODE TO: " + d.getCodeTo());
+				System.out.println("FOR DOOR CODE FROM: " + d.getCodeFrom());
+				if(d.getCodeTo() == levelFrom && d.getCodeFrom() == level){
+					tempDoor = d;
+				}
+			}
+			hedgehogList = lvlThree.getHedgehog();
+			platformList = lvlThree.getPlatform();
+			signList = lvlThree.getSign();	
+			imageList = lvlThree.getImages();
+			if(tempDoor != null){
+				player.setX(tempDoor.getX() + tempDoor.getImage().getWidth() / 2 - player.getImage().getWidth() / 2);
+				player.setY(tempDoor.getY() + tempDoor.getImage().getHeight() - player.getImage().getHeight());
+				System.out.println("WORK WORK WORK");
+			}else{
+				player.setX(lvlThree.getX());
+				player.setY(lvlThree.getY());
+			}
+			this.level = LEVEL_THREE;
+			break;
+		case LEVEL_FOUR:
+			LevelFour lvlFour = new LevelFour(screenWidth, screenHeight, sign, door, hedgehogFacingLeft, ball);
+			buttonList = lvlFour.getButton();
+			doorList = lvlFour.getDoor();
+			for(Door d: doorList){
+				System.out.println("FOR DOOR CODE TO: " + d.getCodeTo());
+				System.out.println("FOR DOOR CODE FROM: " + d.getCodeFrom());
+				if(d.getCodeTo() == levelFrom && d.getCodeFrom() == level){
+					tempDoor = d;
+				}
+			}
+			hedgehogList = lvlFour.getHedgehog();
+			platformList = lvlFour.getPlatform();
+			signList = lvlFour.getSign();	
+			imageList = lvlFour.getImages();
+			if(tempDoor != null){
+				player.setX(tempDoor.getX() + tempDoor.getImage().getWidth() / 2 - player.getImage().getWidth() / 2);
+				player.setY(tempDoor.getY() + tempDoor.getImage().getHeight() - player.getImage().getHeight());
+				System.out.println("WORK WORK WORK");
+			}else{
+				player.setX(lvlFour.getX());
+				player.setY(lvlFour.getY());
+			}
+			this.level = LEVEL_FOUR;
+			break;
 		}
+
 	}
 
 
@@ -1238,11 +1456,11 @@ public class PrintScreen extends JPanel implements KeyListener
 				keyPressedList.add(KeyEvent.VK_W);
 			}
 			if(player.isStanding){
-				if(Math.abs(player.getyVel()) <= 4 * .18 / 3){
-					player.setyVel(JUMP_SPEED);
-					player.updateY();
-					player.isStanding = false;
-				}
+
+				player.setyVel(JUMP_SPEED + player.getyVel() / 4);
+				player.updateY();
+				player.isStanding = false;
+
 			}
 			break;
 
@@ -1328,7 +1546,6 @@ public class PrintScreen extends JPanel implements KeyListener
 
 					hillBackgroundX -= uh / 2;
 
-					System.out.println(hillDisplacement);
 					try{
 						for(PlayerPoint p: playerLocation){
 							p.setX(p.getX() - uh);
@@ -1356,10 +1573,14 @@ public class PrintScreen extends JPanel implements KeyListener
 						s.setX(s.getX() - uh);
 						//s.setY(s.getY() - uh2);
 					}
+					for(Image i : imageList){
+						i.setX(i.getX() - uh);
+					}
 					//player.setX(tempX - uh);
 					player.setY(tempY);
 
 					tempPlayerLocation.clear();
+					playerLocation.clear();
 
 					shadowTimer = 0;
 
@@ -1397,11 +1618,11 @@ public class PrintScreen extends JPanel implements KeyListener
 					if(player.facingRight){
 						ballList.add(new Ball((int)(player.getX() + 4 * player.getImage().getWidth() / 5),
 								(int)(player.getY() - ball.getHeight()), BALL_SPEED * throwBox.getHealth() / 100, -BALL_SPEED * throwBox.getHealth() / 100, ball, true));
-						playerLocation.add(new PlayerPoint(player.getX(), player.getY(), 0, true, 1, throwBox.getHealth()));
+						playerLocation.add(new PlayerPoint(player.getX(), player.getY(), 0, true, 1, throwBox.getHealth(), player.isStanding()));
 					}else{
 						ballList.add(new Ball((int)(player.getX() - player.getImage().getWidth() / 5),
 								(int)(player.getY() - ball.getHeight()), -BALL_SPEED * throwBox.getHealth() / 100, -BALL_SPEED * throwBox.getHealth() / 100, ball, false));
-						playerLocation.add(new PlayerPoint(player.getX(), player.getY(), 0, false, 1, throwBox.getHealth()));
+						playerLocation.add(new PlayerPoint(player.getX(), player.getY(), 0, false, 1, throwBox.getHealth(), player.isStanding()));
 
 					}
 

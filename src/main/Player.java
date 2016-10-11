@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 public class Player {
 	double x, y, xVel, yVel;
 	BufferedImage image;
-	boolean isStanding, facingRight;
+	boolean isStanding, facingRight, isDead;
 	int screenHeight, floor;
 
 	public Player(BufferedImage image, double x, double y, double xVel, double yVel, int screenHeight){
@@ -16,7 +16,17 @@ public class Player {
 		this.screenHeight = screenHeight;
 		this.image = image;
 		this.facingRight = true;
+		this.isDead = false;
 	}
+
+	public boolean isDead() {
+		return isDead;
+	}
+
+	public void setDead(boolean isDead) {
+		this.isDead = isDead;
+	}
+
 
 	public boolean isStanding() {
 		return isStanding;

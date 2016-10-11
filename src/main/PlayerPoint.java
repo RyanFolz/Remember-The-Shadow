@@ -3,23 +3,30 @@ package main;
 
 public class PlayerPoint {
 	double x, y, speed;
-	boolean right;
+	boolean right, isStanding;
 	int timer, action;
 	
-	public PlayerPoint(double x, double y, int timer, boolean right, int action, double speed){
+	public PlayerPoint(double x, double y, int timer, boolean right, int action, double speed, boolean isStanding){
 		this.x = x;
 		this.y = y;
 		this.timer = timer;
 		this.right = right;
 		this.action = action;
 		this.speed = speed;
+		this.isStanding = isStanding;
 	}
 	
 	public double getSpeed() {
 		return speed;
 	}
 
+	public boolean isStanding() {
+		return isStanding;
+	}
 
+	public void setStanding(boolean isStanding) {
+		this.isStanding = isStanding;
+	}
 
 	public void setSpeed(double speed) {
 		this.speed = speed;

@@ -39,25 +39,28 @@ public class LevelOne {
 	
 	public ArrayList<Door> getDoor(){
 		ArrayList<Door> tempList = new ArrayList<>();
-		tempList.add(new Door(screenWidth / 2, screenHeight - door.getHeight() - screenHeight / 20 , door, PrintScreen.LEVEL_TEST, PrintScreen.LEVEL_ONE));
+		tempList.add(new Door(screenWidth / 2, screenHeight - door.getHeight() - screenHeight / 20 , door, PrintScreen.LEVEL_TWO, PrintScreen.LEVEL_ONE));
 		return tempList;
 	}
 	
 	public ArrayList<Platform> getPlatform(){
 		ArrayList<Platform> platformList = new ArrayList<>();
-		platformList.add(new Platform(-10000, (int)(19 * screenHeight / 20), 20000, (int)(screenHeight / 20), Color.BLUE));
+		platformList.add(new Platform(-10000, (int)(19 * screenHeight / 20), 20000, (int)(screenHeight / 20),  new Color(0f,0f,0f, 1f )));
 		platformList.add(new Platform((int)(-screenWidth / 10), (int)(screenHeight / 2), (int)(screenWidth / 40),
-				(int)(screenHeight / 2 - screenHeight / 20), Color.BLUE));
+				(int)(screenHeight / 2 - screenHeight / 20),  new Color(0f,0f,0f, 1f )));
 		platformList.add(new Platform((int)(screenWidth / 1.5), (int)(screenHeight / 2), (int)(screenWidth / 40),
-				(int)(screenHeight / 2 - screenHeight / 20), Color.BLUE));
+				(int)(screenHeight / 2 - screenHeight / 20),  new Color(0f,0f,0f, 1f )));
 		platformList.add(new Platform((int)(-screenWidth / 10), (int)(screenHeight / 2), (int)(screenWidth / 1.5 - -screenWidth / 10),
-				(int)(screenWidth / 40), Color.BLUE));
+				(int)(screenWidth / 40), new Color(0f,0f,0f, 1f )));
 		
 		return platformList;
 	}
 	
 	public ArrayList<Image> getImages() throws IOException{
 		ArrayList<Image> tempList = new ArrayList<>();
+		BufferedImage image1 =  PrintScreen.toCompatibleImage(PrintScreen.createResizedCopy(ImageIO.read(getClass().getResourceAsStream("housething.png")),
+				(int)(screenWidth / 1.5 - -screenWidth / 10 + screenWidth / 26), (int)(screenHeight / 2 - screenWidth / 80), false));
+		tempList.add(new Image(-screenWidth / 9.5, screenHeight / 2, image1));
 		return tempList;
 	}
 	
